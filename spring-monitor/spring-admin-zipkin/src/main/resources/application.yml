@@ -1,0 +1,131 @@
+server:
+  port: 7005
+  tomcat:
+    uri-encoding: UTF-8
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+spring:
+  application:
+    name: spring-admin-zipkin
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true #该参数用来开启重试机制
+    config:
+#      uri: http://localhost:8888
+      enabled: true #开启配置
+      username: ${customConfig.config.server.username}
+      password: ${customConfig.config.server.password}
+      name: ${customConfig.config.server.appname} #配置名称
+      profile: dev
+      fail-fast: true
+      discovery:
+        enabled: true
+        serviceId: spring-config
+  boot: #admin的配置
+    admin:
+#      client:
+        url: http://${customConfig.admin.server.hostname}:${customConfig.admin.server.port}
+        username: ${customConfig.admin.server.username}
+        password: ${customConfig.admin.server.password}
+  sleuth:
+    sampler:
+      percentage: 1.0 #采样率
+#  redis:
+#    host: ${customConfig.redis.server.host}
+#    password: ${customConfig.redis.server.password}
+#    port: ${customConfig.redis.server.port}
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-wait: -1
+#        max-idle: 8
+#        min-idle: 0
+#  zipkin:
+#    base-url: http://localhost:7000
+#zuul:
+#  retryable: true #重试机制开关
+#对当前服务的重试次数
+#ribbon:
+# 所有请求都重试,请求超时或者socket read timeout都进行重试,默认只会在socket还没建立连接时进行重试，比如突然网络抖动或者一台服务实例挂了
+# (修改操作，如果服务器长时间不返回，客户端发生socket read timeout会进行重试，如果服务器接口没做幂等性，这个后果自己想想。)
+#  OkToRetryOnAllOperations: true  所以这个属性不设置
+#  MaxAutoRetriesNextServer: 5
+#  MaxAutoRetries: 0 #同一台实例最大重试次数，不包括首次
+#  ConnectTimeout: 500 #指建立连接的时间
+#  ReadTimeout: 10000
+#  SocketTimeout: 10000
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 10000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  security:
+    enabled: false
+  endpoint:
+    health:
+      show-details: ALWAYS
+#  security:
+#    user:
+#      name: ${customConfig.security.username}
+#      password: ${customConfig.security.password}
+
+zipkin:
+  collector:
+    rabbitmq:
+      addresses: ${customConfig.rabbitmq.server.host}:${customConfig.rabbitmq.server.port}
+      password: ${customConfig.rabbitmq.server.username}
+      username: ${customConfig.rabbitmq.server.password}
+      queue: zipkin
+
+
+
+
+customConfig:
+  eureka:
+    server: #eureka的配置
+      port: 8000
+      username: admin
+      password: admin123
+      hostname: localhost
+  config:
+    server: #config的配置
+      appname: spring-config
+      username: admin
+      password: admin123
+      hostname: localhost
+#  security: #security的配置
+#    username: admin
+#    password: admin123
+  admin:  #admin的配置
+    server:
+      port: 7000
+      hostname: localhost
+      username: admin
+      password: admin123
+  redis:
+    server:
+      host: 127.0.0.1
+      password: admin123
+      port: 6379
+  rabbitmq: #rabbitmq的配置
+    server:
+      host: 127.0.0.1
+      port: 5672
+      username: guest
+      password: guest
+
+
+
+

@@ -1,0 +1,42 @@
+server:
+  port: 7000
+eureka:
+  client:
+    service-url:
+     defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+    register-with-eureka: true    #表示是否注册自身到eureka服务器
+    fetch-registry: true
+spring:
+  application:
+    name: spring-admin
+  boot:
+    admin:
+      routes:
+        endpoints: env,metrics,trace,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,hystrix.stream
+  security:
+    user:
+      name: ${customConfig.security.username}
+      password: ${customConfig.security.password}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  security:
+    enabled: false
+  endpoint:
+    health:
+      show-details: ALWAYS
+
+
+
+customConfig:
+  eureka:
+    server: #eureka的配置
+      port: 8000
+      username: admin
+      password: admin123
+      hostname: localhost
+  security: #security的配置
+    username: admin
+    password: admin123

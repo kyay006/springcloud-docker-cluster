@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.liu.util.image.mapper.ImgManageMapper" >
+
+    <!--图片数据保存-->
+    <insert id="saveImg" parameterType="com.liu.util.image.WaterImgManage" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO lovesound_img_manage
+        (absolutePath, urlPath,imgFileName,imgType,status, createTime, createUserId,updateTime,updateUserId)
+        VALUES
+        (#{absolutePath},
+        #{urlPath},
+        #{imgFileName},
+        #{imgType},
+        #{status},
+        #{createTime},
+        #{createUserId},
+        #{updateTime},
+        #{updateUserId}
+        )
+    </insert>
+
+    <select id="getUserPhotoList" resultType="com.liu.util.image.WaterImgManage">
+        SELECT id,absolutePath,urlPath,imgFileName,imgType,createTime,createUserId,updateTime,updateUserId
+        FROM lovesound_img_manage
+        WHERE createUserId = #{userId}
+        AND imgType = #{imgType}
+        AND status = #{status}
+        ORDER BY createTime DESC
+    </select>
+
+    <update id="delUserImageById" parameterType="map">
+        UPDATE  lovesound_img_manage SET status = #{statusNew},updateTime = #{updateTime}
+        WHERE id = #{id} AND imgType = #{imgType} AND status = #{statusOld} AND createUserId = #{userId}
+    </update>
+
+</mapper>

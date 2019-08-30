@@ -1,0 +1,75 @@
+server:
+  port: 8888
+eureka:
+  client:
+    service-url:
+     defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+    register-with-eureka: true    #表示是否注册自身到eureka服务器
+    fetch-registry: true
+spring:
+  application:
+    name: spring-config
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/config #配置文件所在位置
+    bus:
+      trace:
+        enabled: true
+  rabbitmq:
+     host: ${customConfig.rabbitmq.server.host}
+     port: ${customConfig.rabbitmq.server.port}
+     username: ${customConfig.rabbitmq.server.username}
+     password: ${customConfig.rabbitmq.server.password}
+  boot: #admin的配置
+    admin:
+#      client:
+        url: http://${customConfig.admin.server.hostname}:${customConfig.admin.server.port}
+        username: ${customConfig.admin.server.username}
+        password: ${customConfig.admin.server.password}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  security:
+    enabled: false
+#  endpoint:
+#    health:
+#      show-details: ALWAYS
+security:
+  user:
+    name: ${customConfig.security.username}
+    password: ${customConfig.security.password}
+
+
+
+
+
+customConfig:
+  eureka:
+    server: #eureka的配置
+      port: 8000
+      username: admin
+      password: admin123
+      hostname: localhost
+  security: #security的配置
+    username: admin
+    password: admin123
+  admin:  #admin的配置
+    server:
+      port: 7000
+      hostname: localhost
+      username: admin
+      password: admin123
+  rabbitmq: #rabbitmq的配置
+    server:
+      host: 127.0.0.1
+      port: 5672
+      username: guest
+      password: guest
+
+

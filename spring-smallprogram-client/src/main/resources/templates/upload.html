@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-store"/>
+    <meta http-equiv="Expires" content="0" />
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <title >首页</title>
+    <link th:href="@{/styles/global.css}"  rel="stylesheet" type="text/css"/>
+    <link th:href="@{/styles/home.css}" rel="stylesheet"  type="text/css"/>
+
+    <script th:src="@{/scripts/jquery.min.js}"></script>
+    <script th:src="@{/scripts/common.js}"></script>
+    <script th:src="@{/scripts/public/public.js}"></script>
+    <script th:src="@{/scripts/public/json2.js}"></script>
+
+</head>
+<body>
+
+    <h2>文件上传</h2>
+    <!--<form action="/zuul/spring-client/zzzzzz" enctype="multipart/form-data" method="post">-->
+    <form action="/zzzzzz" enctype="multipart/form-data" method="post">
+        <table>
+            <tr>
+                <td>文件描述:</td>
+                <td><input type="text" name="description" /></td>
+            </tr>
+            <tr>
+                <td>请选择文件:</td>
+                <td><input type="file" name="photo" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="上传"/></td> <!--onsubmit="onUpload()" -->
+            </tr>
+        </table>
+    </form>
+    <script th:inline="javascript">
+        function onUpload(e) {
+            var formData = new FormData();
+            formData.append('file', e.target.files[0]);
+            formData.append('type', 'test');
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                dataType: 'json',
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res){
+                    console.log(res);
+                    if (res.code === 200) {
+                        console.log(res);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+            ;
+        }
+    </script>
+
+
+</body>
+</html>
