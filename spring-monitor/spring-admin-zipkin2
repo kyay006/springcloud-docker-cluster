@@ -1,0 +1,18 @@
+下载： https://search.maven.org/remote_content?g=io.zipkin.java&a=zipkin-server&v=LATEST&c=exec
+
+//java -jar zipkin.jar --zipkin.collector.rabbitmq.addresses=127.0.0.1
+java -jar zipkin-server-2.12.9-exec.jar --zipkin.collector.rabbitmq.addresses=127.0.0.1
+
+
+管理地址： http://127.0.0.1:9411/
+
+
+RabbitMQ 的 Web 管理界面 http://127.0.0.1:15672
+
+
+
+
+
+
+
+
