@@ -12,8 +12,11 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
-    @Select("select * from users")
+    @Select("select * from sys_user")
     List<User> findAll();
+//
+//    @Select("select * from users")
+//    List<User> findAll();
 
 //    @Select("select * from users where user_name=#{userName}")
 //    @Results({ @Result(id = true, column = "userId", property = "user_id"),
