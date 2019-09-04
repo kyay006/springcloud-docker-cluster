@@ -2,7 +2,7 @@ package com.liu.spring.springclient.controller;
 
 import com.liu.spring.domain.commoninfo.Status;
 import com.liu.util.object.HttpJsonResult;
-import com.liu.util.redis.RedisTemplateService2;
+import com.liu.util.rediscluster.RedisConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +29,12 @@ public class BaseController implements ErrorController {
      * @param openId
      * @return
      */
-    protected String getUserIdByRedis(RedisTemplateService2 redisTemplate, String openId)
+//    protected String getUserIdByRedis(RedisTemplateService2 redisTemplate, String openId)
+    protected String getUserIdByRedis(RedisConfig redisTemplate, String openId)
     {
 
-        Object userIds = redisTemplate.get(openId);
+//        Object userIds = redisTemplate.get(openId);
+        Object userIds = redisTemplate.getJedisCluster().get(openId);
         if(userIds == null){
             return null;
         }

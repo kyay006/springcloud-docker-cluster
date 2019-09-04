@@ -1,7 +1,7 @@
 package com.liu.spring.springoauth.filter;
 
 import com.liu.spring.springclient.security.SecuritySettings;
-import com.liu.util.redis.RedisTemplateService1;
+import com.liu.util.rediscluster.RedisConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,8 @@ public class SessionFilter implements Filter {
 
     //oauth2的sessionid存到数据库为1的里面
     @Autowired
-    private RedisTemplateService1 redisTemplateService1;
+//    private RedisTemplateService1 redisTemplateService1;
+    private RedisConfig redisTemplateService1;
 
     @Autowired
     private SecuritySettings settings;
@@ -70,8 +71,10 @@ public class SessionFilter implements Filter {
         {
             SecurityContextImpl securityContextImpl = (SecurityContextImpl) httpServletRequest.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
             // 登录名
-            if(!StringUtils.isEmpty(securityContextImpl) && redisTemplateService1.exists(securityContextImpl.getAuthentication().getName())){
-                sessionIdOld = (String)redisTemplateService1.get(securityContextImpl.getAuthentication().getName());
+//            if(!StringUtils.isEmpty(securityContextImpl) && redisTemplateService1.exists(securityContextImpl.getAuthentication().getName())){
+            if(!StringUtils.isEmpty(securityContextImpl) && redisTemplateService1.getJedisCluster().exists(securityContextImpl.getAuthentication().getName())){
+//                sessionIdOld = (String)redisTemplateService1.get(securityContextImpl.getAuthentication().getName());
+                sessionIdOld = (String)redisTemplateService1.getJedisCluster().get(securityContextImpl.getAuthentication().getName());
             }
 
             //判断认证服务器sessionid是空的或者是false，就是退出了

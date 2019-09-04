@@ -1,7 +1,7 @@
 package com.liu.spring.springoauth.controller;
 
 import com.liu.spring.springoauth.utils.ImageCode;
-import com.liu.util.redis.RedisTemplateService1;
+import com.liu.util.rediscluster.RedisConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
@@ -26,7 +26,8 @@ public class LoginController {
 
     //oauth2的sessionid存到数据库为1的里面
     @Autowired
-    private RedisTemplateService1 redisTemplateService1;
+//    private RedisTemplateService1 redisTemplateService1;
+    private RedisConfig redisTemplateService1;
 
     @Autowired
     private ConsumerTokenServices consumerTokenServices;
@@ -51,7 +52,9 @@ public class LoginController {
         //1.从redis删除session数据或者在数据库里标志已过期，然后再client加请求过滤器，来判断是否登录状态
         SecurityContextImpl securityContextImpl = (SecurityContextImpl) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
         if(securityContextImpl != null && securityContextImpl.getAuthentication() != null){
-            redisTemplateService1.set(securityContextImpl.getAuthentication().getName(), "false", Long.valueOf((60 * 30)));
+//            redisTemplateService1.set(securityContextImpl.getAuthentication().getName(), "false", Long.valueOf((60 * 30)));
+            redisTemplateService1.getJedisCluster().set(securityContextImpl.getAuthentication().getName(), "false");
+            redisTemplateService1.getJedisCluster().expire(securityContextImpl.getAuthentication().getName(), (60 * 30));
         }
 
         // token can be revoked here if needed

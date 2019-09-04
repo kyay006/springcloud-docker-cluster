@@ -18,7 +18,7 @@ import com.liu.util.image.ImgManageService;
 import com.liu.util.image.WaterImgManage;
 import com.liu.util.mysql.PageBean;
 import com.liu.util.object.HttpJsonResult;
-import com.liu.util.redis.RedisTemplateService2;
+import com.liu.util.rediscluster.RedisConfig;
 import com.liu.util.smallprogram.WXPayConstants;
 import com.liu.util.smallprogram.WXUtils;
 import com.liu.util.string.StringUtils;
@@ -57,7 +57,8 @@ public class Chat extends BaseController {
     @Autowired
     LogLoginService logLoginService;
     @Autowired
-    private RedisTemplateService2 redisTemplate;
+//    private RedisTemplateService2 redisTemplate;
+    private RedisConfig redisTemplate;
 
     /**
      * 获取聊天列表 不分页

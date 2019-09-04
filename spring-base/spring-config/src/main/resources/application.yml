@@ -3,9 +3,16 @@ server:
 eureka:
   client:
     service-url:
-     defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+     defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/,http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname2}:${customConfig.eureka.server.port}/eureka/
     register-with-eureka: true    #表示是否注册自身到eureka服务器
     fetch-registry: true
+  # 自定义实例编号
+  instance:
+#   instance-id: ${spring.application.name}:${server.port}:@project.version@
+    # 配置使用主机名注册服务
+#   hostname: ${spring.application.name}
+    # 优先使用IP地址方式进行注册服务
+    prefer-ip-address: true
 spring:
   application:
     name: spring-config
@@ -19,6 +26,11 @@ spring:
     bus:
       trace:
         enabled: true
+#    inetutils:
+#      ignored-interfaces[0]: docker0 #忽略docker0网卡
+#      ignored-interfaces[1]: veth.* #忽略所有veth开头的网卡
+#      preferred-networks[0]: ^192\.168 #只使用192.168开头和10.0开头的ip地址，其他的地址都不会使用,不然在docker启动会向eureka注册10.xxx,外网访问不到这个服务
+#      preferred-networks: ^192\.168\.[\d]+\.[\d]+$
   rabbitmq:
      host: ${customConfig.rabbitmq.server.host}
      port: ${customConfig.rabbitmq.server.port}
@@ -55,7 +67,9 @@ customConfig:
       port: 8000
       username: admin
       password: admin123
-      hostname: localhost
+#      hostname: localhost
+      hostname: 192.168.232.141
+      hostname2: 192.168.232.142
   security: #security的配置
     username: admin
     password: admin123

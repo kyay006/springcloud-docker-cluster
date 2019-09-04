@@ -15,7 +15,7 @@ import com.liu.util.image.ImgManageService;
 import com.liu.util.image.WaterImgManage;
 import com.liu.util.mysql.PageBean;
 import com.liu.util.object.HttpJsonResult;
-import com.liu.util.redis.RedisTemplateService2;
+import com.liu.util.rediscluster.RedisConfig;
 import com.liu.util.string.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,7 +47,8 @@ public class BaseInfo extends BaseController {
     ImgManageService imgManageService;
 
     @Autowired
-    private RedisTemplateService2 redisTemplate;
+//    private RedisTemplateService2 redisTemplate;
+    private RedisConfig redisTemplate;
     @Autowired
     LogLoginService logLoginService;
 
@@ -68,7 +69,8 @@ public class BaseInfo extends BaseController {
         if(openId == null){
             return HttpJsonResult.FAIL("参数错误");
         }
-        Object userIds = redisTemplate.get(openId);
+//        Object userIds = redisTemplate.get(openId);
+        Object userIds = redisTemplate.getJedisCluster().get(openId);
         if(userIds == null){
             return HttpJsonResult.FAIL("参数错误");
         }

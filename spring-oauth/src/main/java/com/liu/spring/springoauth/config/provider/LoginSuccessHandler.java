@@ -1,7 +1,7 @@
 package com.liu.spring.springoauth.config.provider;
 
 import com.liu.spring.springoauth.config.token.User;
-import com.liu.util.redis.RedisTemplateService1;
+import com.liu.util.rediscluster.RedisConfig;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     //oauth2的sessionid存到数据库为1的里面
     @Autowired
-    private RedisTemplateService1 redisTemplateService1;
+//    private RedisTemplateService1 redisTemplateService1;
+    private RedisConfig redisTemplateService1;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -28,7 +29,9 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 //        log.info("登录用户user:" + userDetails.getName() + "login"+request.getContextPath());
         log.info("IP:" + getIpAddress(request));
 
-        redisTemplateService1.set(userDetails.getLoginName(), request.getSession().getId(), Long.valueOf((60 * 60 * 24 * 7)));
+//        redisTemplateService1.set(userDetails.getLoginName(), request.getSession().getId(), Long.valueOf((60 * 60 * 24 * 7)));
+        redisTemplateService1.getJedisCluster().set(userDetails.getLoginName(), request.getSession().getId());
+        redisTemplateService1.getJedisCluster().expire(userDetails.getLoginName(), (60 * 60 * 24 * 7));
 
         super.onAuthenticationSuccess(request, response, authentication);
     }

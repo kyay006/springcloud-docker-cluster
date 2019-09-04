@@ -3,7 +3,7 @@ package com.liu.util.smallprogram;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.liu.util.redis.RedisTemplateService2;
+import com.liu.util.rediscluster.RedisConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 微信小工具类
@@ -43,7 +42,8 @@ public class WXUtils {
 
 
     @Autowired(required = false)
-    private RedisTemplateService2 redisTemplate;
+//    private RedisTemplateService2 redisTemplate;
+    private RedisConfig redisTemplate;
 
     /**
      * 获取微信全局accessToken
@@ -55,7 +55,8 @@ public class WXUtils {
 
         // 取redis数据
         String key = WXConstants.WECHAT_ACCESSTOKEN + code;
-        String accessToken = (String) redisTemplate.opsForValue().get(key);
+//        String accessToken = (String) redisTemplate.opsForValue().get(key);
+        String accessToken = (String) redisTemplate.getJedisCluster().get(key);
         if (accessToken != null) {
             return accessToken;
         }
@@ -65,7 +66,9 @@ public class WXUtils {
         String token = (String) jsonObject.get("access_token");
         if (StringUtils.isNotBlank(token)) {
             // 存储redis
-            redisTemplate.opsForValue().set(key, token, 7000, TimeUnit.SECONDS);
+//            redisTemplate.opsForValue().set(key, token, 7000, TimeUnit.SECONDS);
+            redisTemplate.getJedisCluster().set(key, token);
+            redisTemplate.getJedisCluster().expire(key, 7000);
             return token;
         } else {
             System.out.println("获取微信accessToken出错，微信返回信息为：[{}]" + jsonObject.toString());

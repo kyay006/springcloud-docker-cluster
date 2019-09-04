@@ -74,7 +74,7 @@ spring:
     show-sql: true
   zipkin:
     enabled: true
-    base-url: http://localhost:7005
+    base-url: http://localhost:9410
     locator:
       discovery:
         enabled: true
@@ -82,7 +82,7 @@ spring:
       queue: zipkin
   sleuth:
     sampler:
-      percentage: 1.0 #采样率为1.0 全部
+      probability: 1.0 #采样率为1.0 全部
   rabbitmq:
       host: ${customConfig.rabbitmq.server.host}
       port: ${customConfig.rabbitmq.server.port}

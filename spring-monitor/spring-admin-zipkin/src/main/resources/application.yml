@@ -34,7 +34,7 @@ spring:
         password: ${customConfig.admin.server.password}
   sleuth:
     sampler:
-      percentage: 1.0 #采样率
+      probability: 1.0 #采样率
 #  redis:
 #    host: ${customConfig.redis.server.host}
 #    password: ${customConfig.redis.server.password}

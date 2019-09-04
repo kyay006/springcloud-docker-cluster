@@ -8,6 +8,13 @@ eureka:
       defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
+  # 自定义实例编号
+  instance:
+#   instance-id: ${spring.application.name}:${server.port}:@project.version@
+    # 配置使用主机名注册服务
+#   hostname: ${spring.application.name}
+    # 优先使用IP地址方式进行注册服务
+    prefer-ip-address: true
 spring:
   application:
     name: spring-oauth
@@ -26,6 +33,11 @@ spring:
       discovery:
         enabled: true
         serviceId: spring-config
+    inetutils:
+      ignored-interfaces[0]: docker0 #忽略docker0网卡
+      ignored-interfaces[1]: veth.* #忽略所有veth开头的网卡
+#     preferred-networks[0]: ^192\.168 #只使用192.168开头和10.0开头的ip地址，其他的地址都不会使用,不然在docker启动会向eureka注册10.xxx,外网访问不到这个服务
+#      preferred-networks: ^192\.168\.[\d]+\.[\d]+$
 #  security:
 #    user:
 #      name: ${customConfig.security.username}
@@ -70,7 +82,7 @@ spring:
     show-sql: true
   zipkin:
     enabled: true
-    base-url: http://localhost:7005
+    base-url: http://localhost:9410
     locator:
       discovery:
         enabled: true
@@ -78,7 +90,7 @@ spring:
       queue: zipkin
   sleuth:
     sampler:
-      percentage: 1.0 #采样率为1.0 全部
+      probability: 1.0 #采样率为1.0 全部
   rabbitmq:
       host: ${customConfig.rabbitmq.server.host}
       port: ${customConfig.rabbitmq.server.port}

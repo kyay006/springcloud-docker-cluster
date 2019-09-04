@@ -20,7 +20,7 @@ import com.liu.util.image.WaterImgManage;
 import com.liu.util.ip.IPUtil;
 import com.liu.util.mysql.PageBean;
 import com.liu.util.object.HttpJsonResult;
-import com.liu.util.redis.RedisTemplateService2;
+import com.liu.util.rediscluster.RedisConfig;
 import com.liu.util.string.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,7 +55,8 @@ public class ShowPeople extends BaseController {
     @Autowired
     ImgManageService imgManageService;
     @Autowired
-    private RedisTemplateService2 redisTemplate;
+//    private RedisTemplateService2 redisTemplate;
+    private RedisConfig redisTemplate;
 
     @Autowired
     LogLoginService logLoginService;
@@ -244,7 +245,8 @@ public class ShowPeople extends BaseController {
      */
     private Map<String,String> getRedisValues(String redisName)
     {
-        Object industryValues = redisTemplate.get(redisName);
+//        Object industryValues = redisTemplate.get(redisName);
+        Object industryValues = redisTemplate.getJedisCluster().get(redisName);
         if(industryValues == null){
             //去数据库查一下
             Map<String,String> redisVal = new HashMap<>(16);
@@ -260,7 +262,9 @@ public class ShowPeople extends BaseController {
                     redisVal.put(temp.get(i).getId().toString(), temp.get(i).getCharacterName());
                 }
             }
-            redisTemplate.set(redisName, redisVal, 60 * 60 * 24 * 7L);//7天
+//            redisTemplate.set(redisName, redisVal, 60 * 60 * 24 * 7L);//7天
+            redisTemplate.getJedisCluster().hmset(redisName, redisVal);//7天
+            redisTemplate.getJedisCluster().expire(redisName, 60 * 60 * 24 * 7);
             industryValues = redisVal;
         }
         return (Map<String,String>)industryValues;

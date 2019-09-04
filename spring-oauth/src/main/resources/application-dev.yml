@@ -5,9 +5,16 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/,http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname2}:${customConfig.eureka.server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
+  # 自定义实例编号
+  instance:
+#   instance-id: ${spring.application.name}:${server.port}:@project.version@
+    # 配置使用主机名注册服务
+#   hostname: ${spring.application.name}
+    # 优先使用IP地址方式进行注册服务
+    prefer-ip-address: true
 spring:
   application:
     name: spring-oauth
@@ -26,6 +33,11 @@ spring:
       discovery:
         enabled: true
         serviceId: spring-config
+    inetutils:
+      ignored-interfaces[0]: docker0 #忽略docker0网卡
+      ignored-interfaces[1]: veth.* #忽略所有veth开头的网卡
+#     preferred-networks[0]: ^192\.168 #只使用192.168开头和10.0开头的ip地址，其他的地址都不会使用,不然在docker启动会向eureka注册10.xxx,外网访问不到这个服务
+#      preferred-networks: ^192\.168\.[\d]+\.[\d]+$
 #  security:
 #    user:
 #      name: ${customConfig.security.username}
@@ -37,9 +49,14 @@ spring:
         username: ${customConfig.admin.server.username}
         password: ${customConfig.admin.server.password}
   redis:
-    host: ${customConfig.redis.server.host}
-    password: ${customConfig.redis.server.password}
-    port: ${customConfig.redis.server.port}
+    cluster:
+      nodes: ${customConfig.redis.server.host}
+      connTimeOut: 1000 #连接server超时时间
+      soTimeOut: 1000 #等待response超时时间
+      maxAttempts: 2 #连接失败重试次数
+#    host: ${customConfig.redis.server.host}
+#    password: ${customConfig.redis.server.password}
+#    port: ${customConfig.redis.server.port}
     timeout: ${customConfig.redis.server.timeout}
     jedis:
       pool:
@@ -70,7 +87,7 @@ spring:
     show-sql: true
   zipkin:
     enabled: true
-    base-url: http://localhost:7005
+    base-url: http://localhost:9410
     locator:
       discovery:
         enabled: true
@@ -78,7 +95,7 @@ spring:
       queue: zipkin
   sleuth:
     sampler:
-      percentage: 1.0 #采样率为1.0 全部
+      probability: 1.0 #采样率为1.0 全部
   rabbitmq:
       host: ${customConfig.rabbitmq.server.host}
       port: ${customConfig.rabbitmq.server.port}
@@ -152,13 +169,15 @@ customConfig:
       port: 8000
       username: admin
       password: admin123
-      hostname: localhost
+#      hostname: localhost
+      hostname: 192.168.232.141
+      hostname2: 192.168.232.142
   config:
     server: #config的配置
       appname: spring-config
       username: admin
       password: admin123
-      hostname: localhost
+#      hostname: localhost
 #  security: #security的配置
 #    username: admin
 #    password: admin123
@@ -170,7 +189,8 @@ customConfig:
       password: admin123
   redis:
     server:
-      host: 127.0.0.1
+#      host: 127.0.0.1
+      host: 192.168.232.141:7001,192.168.232.142:7002,192.168.232.142:7003
       password: #redisadmin
       port: 6379
       timeout: 8000
@@ -182,9 +202,11 @@ customConfig:
           min-idle: 0
   datasource:
     server:
-      url: jdbc:mysql://127.0.0.1:3306/lovesound?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+#      url: jdbc:mysql://127.0.0.1:3306/lovesound?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+      url: jdbc:mysql://192.168.232.141:3306/lovesound?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
       username: root
-      password: adminsina
+#      password: adminsina
+      password: 123456
       driver-class-name: com.mysql.jdbc.Driver
   rabbitmq: #rabbitmq的配置
     server:

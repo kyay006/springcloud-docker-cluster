@@ -10,7 +10,7 @@ import com.liu.spring.service.myinfo.BaseInfoService;
 import com.liu.spring.springclient.controller.BaseController;
 import com.liu.util.date.DateUtils;
 import com.liu.util.object.HttpJsonResult;
-import com.liu.util.redis.RedisTemplateService2;
+import com.liu.util.rediscluster.RedisConfig;
 import com.liu.util.smallprogram.AES;
 import com.liu.util.smallprogram.WXPayConstants;
 import com.liu.util.smallprogram.WXUtils;
@@ -37,7 +37,8 @@ public class Authorize extends BaseController {
 
 
     @Autowired
-    private RedisTemplateService2 redisTemplate;
+//    private RedisTemplateService2 redisTemplate;
+    private RedisConfig redisTemplate;
 
     @Autowired
     AuthorizeService authorizeService;
@@ -120,7 +121,10 @@ public class Authorize extends BaseController {
         }
         sf.append(Status.AND.getValue()).append(wxUser.getId());
         //存一下redis,8小时
-        redisTemplate.saveKeyVal(openId, sf.toString()).expire(openId, 60 * 60 * 8);
+//        redisTemplate.saveKeyVal(openId, sf.toString()).expire(openId, 60 * 60 * 8);
+        redisTemplate.getJedisCluster().set(openId, sf.toString());
+        redisTemplate.getJedisCluster().expire(openId, 60 * 60 * 8);
+
         loveSoundLogLogin.setUserId(wxUser.getId());
         loveSoundLogLogin.setOpenId(wxUser.getOpenid());
         loveSoundLogLogin.setCreateTime(DateUtils.getNowDateTimestamp());

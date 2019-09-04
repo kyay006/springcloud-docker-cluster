@@ -8,6 +8,7 @@ import com.liu.spring.service.log.LogFeign;
 import com.liu.spring.service.log.LogLoginService;
 import com.liu.util.date.DateUtils;
 import com.liu.util.fastdfs.FastDFSClientWrapper;
+import com.liu.util.rediscluster.RedisConfig;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.mybatis.spring.annotation.MapperScan;
@@ -15,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.context.annotation.Import;
@@ -35,17 +34,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.util.List;
+
+//import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 //import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableSwagger2
 @Controller
 @EnableWebSecurity
-@EnableEurekaClient
+//@EnableEurekaClient
 @ServletComponentScan
 @SpringBootApplication
-@EnableFeignClients(basePackages = { "com.liu.spring.service"}) //启用Feign服务消费默认配置
+//@EnableFeignClients(basePackages = { "com.liu.spring.service"}) //启用Feign服务消费默认配置
 @EnableRedisHttpSession //session共享
 @EnableDistributedTransaction //分布式事务lcn，表明这是一个txmanager的client
 @Import(FdfsClientConfig.class) //将Fdfs配置引入项目
@@ -60,14 +62,41 @@ public class SpringClientApplication {
     @Autowired
     private LogLoginService logLoginService;
 
+
+    @Autowired
+    private RedisConfig redisTemplate;
+
+
     @Autowired(required = false)
     private LogFeign logFeign;
 
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         SpringApplication.run(SpringClientApplication.class, args);
+
+
+
+//        GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("MyProject-1234.json"))
+//                .createScoped(Collections.singleton(SQLAdminScopes.SQLSERVICE_ADMIN));
+
+        //www.googleapis.com/oauth2/v4/token
+
+
     }
+
+
+
+    @ResponseBody
+    @RequestMapping("getTest")
+    public Object getTest(HttpServletRequest request) {
+        String result = redisTemplate.getJedisCluster().set("wode","天天向上");
+
+//        System.out.println(request.getServerPort());
+        return result;
+    }
+
+
 
 
     /**
@@ -106,7 +135,13 @@ public class SpringClientApplication {
         loveSoundLogSearch.setUserId(Long.valueOf(22));
         loveSoundLogSearch.setCreateTime(DateUtils.getNowDateTimestamp());
 
-        logLoginService.updateLogSearch();
+//        logLoginService.updateLogSearch();
+        try {
+            logLoginService.updateLogSearch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
 
 //        logLoginService.saveLogSearch(loveSoundLogSearch);
 
@@ -151,7 +186,13 @@ public class SpringClientApplication {
 //
 //        logLoginService.updateLogLogin();
 
-        logLoginService.updateLogSearch1();
+//        logLoginService.updateLogSearch1();
+        try {
+            logLoginService.updateLogSearch1();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         System.out.println(2222222 + ":::::" + request.getServerPort());
 
 //        if(1 == 1){

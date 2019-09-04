@@ -1,5 +1,5 @@
 server:
-  port: 8006
+  port: 8005
   tomcat:
     uri-encoding: UTF-8
 #  ssl:
@@ -10,11 +10,18 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/,http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname2}:${customConfig.eureka.server.port}/eureka/
     register-with-eureka: true
     fetch-registry: true
     instance-info-replication-interval-seconds: 180 #复制实例变化信息到eureka服务器所需要的时间间隔（s），默认为30秒
     registry-fetch-interval-seconds: 180 #从eureka服务器注册表中获取注册信息的时间间隔（s），默认为30秒
+  # 自定义实例编号
+  instance:
+#   instance-id: ${spring.application.name}:${server.port}:@project.version@
+    # 配置使用主机名注册服务
+#   hostname: ${spring.application.name}
+    # 优先使用IP地址方式进行注册服务
+    prefer-ip-address: true
 
 spring:
   application:
@@ -41,9 +48,14 @@ spring:
         username: ${customConfig.admin.server.username}
         password: ${customConfig.admin.server.password}
   redis:
-    host: ${customConfig.redis.server.host}
-    password: ${customConfig.redis.server.password}
-    port: ${customConfig.redis.server.port}
+    cluster:
+      nodes: ${customConfig.redis.server.host}
+      connTimeOut: 1000 #连接server超时时间
+      soTimeOut: 1000 #等待response超时时间
+      maxAttempts: 2 #连接失败重试次数
+#    host: ${customConfig.redis.server.host}
+#    password: ${customConfig.redis.server.password}
+#    port: ${customConfig.redis.server.port}
     timeout: ${customConfig.redis.server.timeout}
     jedis:
       pool:
@@ -74,7 +86,7 @@ spring:
     show-sql: true
   zipkin:
     enabled: true
-    base-url: http://localhost:7005
+    base-url: http://localhost:9410
     locator:
       discovery:
         enabled: true
@@ -82,7 +94,7 @@ spring:
       queue: zipkin
   sleuth:
     sampler:
-      percentage: 1.0 #采样率为1.0 全部
+      probability: 1.0 #采样率为1.0 全部
   rabbitmq:
       host: ${customConfig.rabbitmq.server.host}
       port: ${customConfig.rabbitmq.server.port}
@@ -169,7 +181,7 @@ security:
 
 security-config:
   logoutSuccssurl: /tosignout
-  permitAll: /getHello,/getHe2,/zzzzzz,/delImage,downloadImage,/static/**,/smallProgram/**,/resource/**,/wechat/sub/**,/MP_verify_Lo5ZxMzKsqiAdzP2.txt,/favicon.ico
+  permitAll: /getTest,/getHello,/getHe2,/zzzzzz,/delImage,downloadImage,/static/**,/smallProgram/**,/resource/**,/wechat/sub/**,/MP_verify_Lo5ZxMzKsqiAdzP2.txt,/favicon.ico
   deniedPage: /deny
   urlRoles: /getHello1,/getHello3 = admin;/**/delete/** = admin
 #/swagger-ui.html,/v2/api-docs,/swagger-resources/**,/swagger-ui.html**,/webjars/**,
@@ -214,7 +226,9 @@ customConfig:
       port: 8000
       username: admin
       password: admin123
-      hostname: localhost
+#      hostname: localhost
+      hostname: 192.168.232.141
+      hostname2: 192.168.232.142
   config:
     server: #config的配置
       appname: spring-config
@@ -232,7 +246,8 @@ customConfig:
       password: admin123
   redis:
     server:
-      host: 127.0.0.1
+#      host: 127.0.0.1
+      host: 192.168.232.141:7001,192.168.232.142:7002,192.168.232.142:7003
       password: #redisadmin
       port: 6379
       timeout: 8000
@@ -248,10 +263,14 @@ customConfig:
 #      username: mycat
 #      password: mycat
 #      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/lovesound?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+#      url: jdbc:mysql://127.0.0.1:3306/lovesound?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+#      username: root
+#      password: adminsina
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://192.168.232.141:3306/lovesound?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
       username: root
-      password: adminsina
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
   rabbitmq: #rabbitmq的配置
     server:
       host: 127.0.0.1

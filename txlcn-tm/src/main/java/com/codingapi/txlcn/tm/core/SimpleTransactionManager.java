@@ -16,7 +16,6 @@
 package com.codingapi.txlcn.tm.core;
 
 import com.codingapi.txlcn.common.exception.TransactionException;
-import com.codingapi.txlcn.common.util.Transactions;
 import com.codingapi.txlcn.logger.TxLogger;
 import com.codingapi.txlcn.tm.core.storage.TransactionUnit;
 import com.codingapi.txlcn.tm.support.service.TxExceptionService;
@@ -132,8 +131,7 @@ public class SimpleTransactionManager implements TransactionManager {
                     // record exception
                     throw new RpcException("offline mod.");
                 }
-                MessageDto respMsg =
-                        rpcClient.request(modChannelKeys.get(0), MessageCreator.notifyUnit(notifyUnitParams));
+                MessageDto respMsg = rpcClient.request(modChannelKeys.get(0), MessageCreator.notifyUnit(notifyUnitParams));
                 if (!MessageUtils.statusOk(respMsg)) {
                     // 提交/回滚失败的消息处理
                     List<Object> params = Arrays.asList(notifyUnitParams, transUnit.getModId());

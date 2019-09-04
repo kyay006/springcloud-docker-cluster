@@ -33,11 +33,6 @@
 
 
         <!--eureka client-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
-        <!--</dependency>-->
-
         <!--2.0的-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -106,14 +101,18 @@
 
 
 
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-zipkin</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.amqp</groupId>-->
-            <!--<artifactId>spring-rabbit</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+        </dependency>-->
 
 
 
@@ -125,6 +124,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.46</version>
             <scope>runtime</scope>
         </dependency>
         <!-- 集成Druid 使用数据源 -->
@@ -194,6 +194,16 @@
             <groupId>com.codingapi.txlcn</groupId>
             <artifactId>txlcn-txmsg-netty</artifactId>
             <version>${codingapi.txlcn.version}</version>
+        </dependency>
+
+
+
+
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-calendar</artifactId>
+            <version>v3-rev378-1.25.0</version>
         </dependency>
 
 
