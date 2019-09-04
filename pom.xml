@@ -16,9 +16,9 @@
         <module>spring-monitor</module>
         <module>spring-zuul</module>
         <module>spring-oauth</module>
-        <module>spring-smallprogram-client</module>
+        <!--<module>spring-smallprogram-client</module>
         <module>spring-rbac-manage</module>
-        <module>spring-order</module>
+        <module>spring-order</module>-->
     </modules>
 
     <parent>
