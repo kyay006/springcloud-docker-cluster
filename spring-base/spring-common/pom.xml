@@ -14,7 +14,7 @@
 
     <parent>
         <groupId>com.liu.lovesound</groupId>
-        <artifactId>spring-base</artifactId>
+        <artifactId>spring-simple</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
