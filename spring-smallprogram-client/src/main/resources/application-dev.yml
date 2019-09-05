@@ -160,8 +160,9 @@ fdfs:
 
 #auth-server: http://qingyinoauth.com:8002 # 认证服务器地址
 #auth-server: http://iqingyin.com:8002 # 认证服务器地址
-auth-server: http://localhost:8002 # 认证服务器地址
+#auth-server: http://localhost:8002 # 认证服务器地址
 #auth-server: http://lang:8001/spring-oauth # 认证服务器地址
+auth-server: http://192.168.232.142:8001/spring-oauth # 认证服务器地址
 security:
   ignored: /favicon.ico,/scripts/**,/styles/**,/images/**
   sessions: ALWAYS
@@ -200,8 +201,8 @@ tx-lcn:
   springcloud:
     loadbalance:
       enabled: true
-  client:
-    manager-address: 127.0.0.1:8070
+#  client:
+#    manager-address: 127.0.0.1:8070 #只要连了redis，就会自动到redis里找服务器
   logger:
     enabled: true
     driver-class-name: ${customConfig.datasource.server.driver-class-name}
