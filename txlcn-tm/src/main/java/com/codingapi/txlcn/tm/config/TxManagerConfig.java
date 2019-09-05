@@ -19,7 +19,9 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -38,6 +40,9 @@ public class TxManagerConfig {
     public static final int PORT_CHANGE_VALUE = 100;
 
     @Autowired
+    private InetUtils inet;
+
+    @Autowired
     public TxManagerConfig(ServerProperties serverProperties) {
         this.port = Objects.requireNonNull(serverProperties.getPort(), "TM http port not configured?") +
                 PORT_CHANGE_VALUE;
@@ -46,7 +51,8 @@ public class TxManagerConfig {
     /**
      * manager host
      */
-    private String host = "127.0.0.1";
+//    private String host = "127.0.0.1";
+    private String host;
 
     /**
      * support  port
@@ -94,6 +100,14 @@ public class TxManagerConfig {
     private int seqLen = 12;
 
     private long machineId;
+
+
+    public String getHost() {
+        if(StringUtils.isEmpty(this.host)){
+            return inet.findFirstNonLoopbackHostInfo().getIpAddress();
+        }
+        return this.host;
+    }
 
     private void setMachineId(long machineId) {
         this.machineId = machineId;

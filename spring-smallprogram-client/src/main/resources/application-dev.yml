@@ -201,8 +201,10 @@ tx-lcn:
   springcloud:
     loadbalance:
       enabled: true
-#  client:
-#    manager-address: 127.0.0.1:8070 #只要连了redis，就会自动到redis里找服务器
+  client:
+#    manager-address: 127.0.0.1:8070
+#    manager-address: 192.168.232.141:8070
+    manager-address: 192.168.199.130:8070
   logger:
     enabled: true
     driver-class-name: ${customConfig.datasource.server.driver-class-name}

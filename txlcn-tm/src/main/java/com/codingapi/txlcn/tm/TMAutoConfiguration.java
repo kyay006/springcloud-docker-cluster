@@ -24,10 +24,12 @@ import com.codingapi.txlcn.tm.config.TxManagerConfig;
 import com.codingapi.txlcn.tm.core.storage.FastStorage;
 import com.codingapi.txlcn.tm.core.storage.FastStorageProvider;
 import com.codingapi.txlcn.tm.core.storage.redis.RedisStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -56,6 +58,9 @@ import java.util.concurrent.TimeUnit;
 @EnableJpaRepositories("com.codingapi.txlcn.tm.support.db.jpa")
 @EntityScan("com.codingapi.txlcn.tm.support.db.domain")
 public class TMAutoConfiguration {
+
+    @Autowired
+    private InetUtils inet;
 
     @Bean(destroyMethod = "shutdown")
     public ExecutorService executorService() {
@@ -98,6 +103,8 @@ public class TMAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ModIdProvider modIdProvider(ConfigurableEnvironment environment, ServerProperties serverProperties) {
-        return () -> ApplicationInformation.modId(environment, serverProperties);
+        InetUtils.HostInfo hostInfo = inet.findFirstNonLoopbackHostInfo();
+        return () -> hostInfo.getIpAddress() + ":" + ApplicationInformation.serverPort(serverProperties);
+//        return () -> ApplicationInformation.modId(environment, serverProperties);
     }
 }
