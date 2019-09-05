@@ -36,11 +36,10 @@
 
         <!--eureka client-->
         <!--2.0的-->
-
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>-->
+        </dependency>
 
 
 
