@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.context.annotation.Import;
@@ -37,14 +38,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-//import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-
 //import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableSwagger2
 @Controller
 @EnableWebSecurity
-//@EnableEurekaClient
+@EnableEurekaClient
 @ServletComponentScan
 @SpringBootApplication
 //@EnableFeignClients(basePackages = { "com.liu.spring.service"}) //启用Feign服务消费默认配置
