@@ -1,206 +1,206 @@
-server:
-  port: 8001
-eureka:
-  client:
-    service-url:
-      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
-    register-with-eureka: true
-    fetch-registry: true
-spring:
-  application:
-    name: spring-zuul
-  cloud:
-    loadbalancer:
-      retry:
-        enabled: true
-    config:
-#      uri: http://localhost:8888
-      enabled: true #开启配置
-      username: ${customConfig.config.server.username}
-      password: ${customConfig.config.server.password}
-      name: ${customConfig.config.server.appname} #配置名称
-      profile: dev
-      fail-fast: true
-      discovery:
-        enabled: true #从远程获取配置文件
-        serviceId: spring-config
-  boot: #admin的配置
-    admin:
-#      client:
-        url: http://${customConfig.admin.server.hostname}:${customConfig.admin.server.port}
-        username: ${customConfig.admin.server.username}
-        password: ${customConfig.admin.server.password}
-  redis:
-    host: ${customConfig.redis.server.host}
-    password: ${customConfig.redis.server.password}
-    port: ${customConfig.redis.server.port}
-    timeout: ${customConfig.redis.server.timeout}
-    jedis:
-      pool:
-        max-active: ${customConfig.redis.server.jedis.pool.max-active}
-        max-wait: ${customConfig.redis.server.jedis.pool.max-wait}
-        max-idle: ${customConfig.redis.server.jedis.pool.max-idle}
-        min-idle: ${customConfig.redis.server.jedis.pool.min-idle}
-  zipkin:
-    enabled: true
-    base-url: http://localhost:7005
-    locator:
-      discovery:
-        enabled: true
-    rabbitmq:
-      queue: zipkin
-  sleuth:
-    sampler:
-      percentage: 1.0 #采样率为1.0 全部
-  rabbitmq:
-      host: ${customConfig.rabbitmq.server.host}
-      port: ${customConfig.rabbitmq.server.port}
-      username: ${customConfig.rabbitmq.server.username}
-      password: ${customConfig.rabbitmq.server.password}
-zuul:
-  #虽然路径的前缀默认会被删除的,但是请求后端的时候header还是会附带一个”X-Forwarded-Prefix”属性(如上的”/myusers”示例).如果不加这个，就会出现授权两次才能请求成功
-  add-proxy-headers: false
-  routes:
-    spring-admin:
-      path: /spring-admin/**
-      serviceId: spring-admin
-      stripPrefix: true
-#      sensitiveHeaders: Authorization #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
-      sensitiveHeaders: "*" #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
-    spring-client:
-#      url: http://localhost:8005/
-      path: /spring-client/**
-      serviceId: spring-client
-      stripPrefix: true
-#      sensitiveHeaders: Authorization #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
-      sensitiveHeaders: "*" #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
-    spring-oauth:
-      path: /spring-oauth/**
-      serviceId: spring-oauth
-      stripPrefix: true
-#      sensitiveHeaders: Authorization #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
-      sensitiveHeaders: "*" #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
-#    ribbon-server:
-#      path: /ribbon-server/**
-#      serviceId: ribbon-server
+#server:
+#  port: 8001
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://${customConfig.eureka.server.username}:${customConfig.eureka.server.password}@${customConfig.eureka.server.hostname}:${customConfig.eureka.server.port}/eureka/
+#    register-with-eureka: true
+#    fetch-registry: true
+#spring:
+#  application:
+#    name: spring-zuul
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: true
+#    config:
+##      uri: http://localhost:8888
+#      enabled: true #开启配置
+#      username: ${customConfig.config.server.username}
+#      password: ${customConfig.config.server.password}
+#      name: ${customConfig.config.server.appname} #配置名称
+#      profile: dev
+#      fail-fast: true
+#      discovery:
+#        enabled: true #从远程获取配置文件
+#        serviceId: spring-config
+#  boot: #admin的配置
+#    admin:
+##      client:
+#        url: http://${customConfig.admin.server.hostname}:${customConfig.admin.server.port}
+#        username: ${customConfig.admin.server.username}
+#        password: ${customConfig.admin.server.password}
+#  redis:
+#    host: ${customConfig.redis.server.host}
+#    password: ${customConfig.redis.server.password}
+#    port: ${customConfig.redis.server.port}
+#    timeout: ${customConfig.redis.server.timeout}
+#    jedis:
+#      pool:
+#        max-active: ${customConfig.redis.server.jedis.pool.max-active}
+#        max-wait: ${customConfig.redis.server.jedis.pool.max-wait}
+#        max-idle: ${customConfig.redis.server.jedis.pool.max-idle}
+#        min-idle: ${customConfig.redis.server.jedis.pool.min-idle}
+#  zipkin:
+#    enabled: true
+#    base-url: http://localhost:7005
+#    locator:
+#      discovery:
+#        enabled: true
+#    rabbitmq:
+#      queue: zipkin
+#  sleuth:
+#    sampler:
+#      percentage: 1.0 #采样率为1.0 全部
+#  rabbitmq:
+#      host: ${customConfig.rabbitmq.server.host}
+#      port: ${customConfig.rabbitmq.server.port}
+#      username: ${customConfig.rabbitmq.server.username}
+#      password: ${customConfig.rabbitmq.server.password}
+#zuul:
+#  #虽然路径的前缀默认会被删除的,但是请求后端的时候header还是会附带一个”X-Forwarded-Prefix”属性(如上的”/myusers”示例).如果不加这个，就会出现授权两次才能请求成功
+#  add-proxy-headers: false
+#  routes:
+#    spring-admin:
+#      path: /spring-admin/**
+#      serviceId: spring-admin
 #      stripPrefix: true
-#      sensitiveHeaders: "*"
-  retryable: true #重试机制开关
-#对当前服务的重试次数
-ribbon:
-# 所有请求都重试,请求超时或者socket read timeout都进行重试,默认只会在socket还没建立连接时进行重试，比如突然网络抖动或者一台服务实例挂了
-# (修改操作，如果服务器长时间不返回，客户端发生socket read timeout会进行重试，如果服务器接口没做幂等性，这个后果自己想想。)
-#  OkToRetryOnAllOperations: true  所以这个属性不设置
-  MaxAutoRetriesNextServer: 5
-  MaxAutoRetries: 0 #同一台实例最大重试次数，不包括首次
-  ConnectTimeout: 500 #指建立连接的时间
-  ReadTimeout: 30000
-  SocketTimeout: 10000 #切换相同Server的次数
-hystrix:
-    command:
-        default:
-            execution:
-                isolation:
-                    thread:
-                        timeoutInMilliseconds: 30000
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  security:
-    enabled: false
-  endpoint:
-    health:
-      show-details: ALWAYS
-#security:
-#  user:
-#    name: ${customConfig.security.username}
-#    password: ${customConfig.security.password}
-
-#auth-server: http://localhost:8002 # 认证服务器地址
-#security:
-#  ignored: /favicon.ico,/scripts/**,/styles/**,/images/**
-#  sessions: ALWAYS
-#  oauth2:
-#      sso:
-#        loginPath: /login
-#      client:
-#        clientId: ssoclient
-#        clientSecret: ssosecret
-#        accessTokenUri: ${auth-server}/oauth/token
-#        userAuthorizationUri: ${auth-server}/oauth/authorize
-#        clientAuthenticationScheme: form
-#      resource:
-#        jwt:
-#          keyUri: ${auth-server}/oauth/token_key
+##      sensitiveHeaders: Authorization #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
+#      sensitiveHeaders: "*" #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
+#    spring-client:
+##      url: http://localhost:8005/
+#      path: /spring-client/**
+#      serviceId: spring-client
+#      stripPrefix: true
+##      sensitiveHeaders: Authorization #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
+#      sensitiveHeaders: "*" #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
+#    spring-oauth:
+#      path: /spring-oauth/**
+#      serviceId: spring-oauth
+#      stripPrefix: true
+##      sensitiveHeaders: Authorization #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
+#      sensitiveHeaders: "*" #sensitiveHeaders并把它设为空，这是一个屏蔽的黑名单，默认不为空，会屏蔽Cookie
+##    ribbon-server:
+##      path: /ribbon-server/**
+##      serviceId: ribbon-server
+##      stripPrefix: true
+##      sensitiveHeaders: "*"
+#  retryable: true #重试机制开关
+##对当前服务的重试次数
+#ribbon:
+## 所有请求都重试,请求超时或者socket read timeout都进行重试,默认只会在socket还没建立连接时进行重试，比如突然网络抖动或者一台服务实例挂了
+## (修改操作，如果服务器长时间不返回，客户端发生socket read timeout会进行重试，如果服务器接口没做幂等性，这个后果自己想想。)
+##  OkToRetryOnAllOperations: true  所以这个属性不设置
+#  MaxAutoRetriesNextServer: 5
+#  MaxAutoRetries: 0 #同一台实例最大重试次数，不包括首次
+#  ConnectTimeout: 500 #指建立连接的时间
+#  ReadTimeout: 30000
+#  SocketTimeout: 10000 #切换相同Server的次数
+#hystrix:
+#    command:
+#        default:
+#            execution:
+#                isolation:
+#                    thread:
+#                        timeoutInMilliseconds: 30000
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  security:
+#    enabled: false
+#  endpoint:
+#    health:
+#      show-details: ALWAYS
+##security:
+##  user:
+##    name: ${customConfig.security.username}
+##    password: ${customConfig.security.password}
 #
-#securityconfig:
-#  logoutsuccssurl: /tosignout
-#  permitall: /getHello,/bb** #
-#  deniedpage: /deny
-#  urlroles: /getHello1 = admin;
-#            /getHello2 = admin,editor;
-#            /getHello3 = editor;
-#            /**/delete/** = admin
-
-
-
-
-#debug: true
-#logging:
-#  level:
-#   org: DEBUG
-#   com: DEBUG
-
-
-
-
-
-
-customConfig:
-  eureka:
-    server: #eureka的配置
-      port: 8000
-      username: admin
-      password: admin123
-      hostname: localhost
-  config:
-    server: #config的配置
-      appname: spring-zuul
-      username: admin
-      password: admin123
-      hostname: localhost
-  security: #security的配置
-    username: admin
-    password: admin123
-  admin:  #admin的配置
-    server:
-      port: 7000
-      hostname: localhost
-      username: admin
-      password: admin123
-  redis:
-    server:
-      host: 127.0.0.1
-      password: admin123
-      port: 6379
-      timeout: 8000
-      jedis:
-        pool:
-          max-active: 8
-          max-wait: -1
-          max-idle: 8
-          min-idle: 0
-  rabbitmq: #rabbitmq的配置
-    server:
-      host: 127.0.0.1
-      port: 5672
-      username: guest
-      password: guest
-
-
-
-
-
-
+##auth-server: http://localhost:8002 # 认证服务器地址
+##security:
+##  ignored: /favicon.ico,/scripts/**,/styles/**,/images/**
+##  sessions: ALWAYS
+##  oauth2:
+##      sso:
+##        loginPath: /login
+##      client:
+##        clientId: ssoclient
+##        clientSecret: ssosecret
+##        accessTokenUri: ${auth-server}/oauth/token
+##        userAuthorizationUri: ${auth-server}/oauth/authorize
+##        clientAuthenticationScheme: form
+##      resource:
+##        jwt:
+##          keyUri: ${auth-server}/oauth/token_key
+##
+##securityconfig:
+##  logoutsuccssurl: /tosignout
+##  permitall: /getHello,/bb** #
+##  deniedpage: /deny
+##  urlroles: /getHello1 = admin;
+##            /getHello2 = admin,editor;
+##            /getHello3 = editor;
+##            /**/delete/** = admin
+#
+#
+#
+#
+##debug: true
+##logging:
+##  level:
+##   org: DEBUG
+##   com: DEBUG
+#
+#
+#
+#
+#
+#
+#customConfig:
+#  eureka:
+#    server: #eureka的配置
+#      port: 8000
+#      username: admin
+#      password: admin123
+#      hostname: localhost
+#  config:
+#    server: #config的配置
+#      appname: spring-zuul
+#      username: admin
+#      password: admin123
+#      hostname: localhost
+#  security: #security的配置
+#    username: admin
+#    password: admin123
+#  admin:  #admin的配置
+#    server:
+#      port: 7000
+#      hostname: localhost
+#      username: admin
+#      password: admin123
+#  redis:
+#    server:
+#      host: 127.0.0.1
+#      password: admin123
+#      port: 6379
+#      timeout: 8000
+#      jedis:
+#        pool:
+#          max-active: 8
+#          max-wait: -1
+#          max-idle: 8
+#          min-idle: 0
+#  rabbitmq: #rabbitmq的配置
+#    server:
+#      host: 127.0.0.1
+#      port: 5672
+#      username: guest
+#      password: guest
+#
+#
+#
+#
+#
+#

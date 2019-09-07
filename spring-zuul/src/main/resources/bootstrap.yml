@@ -43,9 +43,14 @@ spring:
         username: ${customConfig.admin.server.username}
         password: ${customConfig.admin.server.password}
   redis:
-    host: ${customConfig.redis.server.host}
-    password: ${customConfig.redis.server.password}
-    port: ${customConfig.redis.server.port}
+    cluster:
+      nodes: ${customConfig.redis.server.host}
+      connTimeOut: 1000 #连接server超时时间
+      soTimeOut: 1000 #等待response超时时间
+      maxAttempts: 2 #连接失败重试次数
+    #    host: ${customConfig.redis.server.host}
+    #    password: ${customConfig.redis.server.password}
+    #    port: ${customConfig.redis.server.port}
     timeout: ${customConfig.redis.server.timeout}
     jedis:
       pool:
@@ -202,8 +207,9 @@ customConfig:
       password: admin123
   redis:
     server:
-      host: 127.0.0.1
-      password: admin123
+#      host: 127.0.0.1
+      host: 192.168.232.141:7001,192.168.232.142:7002,192.168.232.142:7003
+      password: #admin123
       port: 6379
       timeout: 8000
       jedis:
