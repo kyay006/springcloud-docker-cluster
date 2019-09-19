@@ -68,8 +68,8 @@ customConfig:
       username: admin
       password: admin123
 #      hostname: localhost
-      hostname: 192.168.232.141
-      hostname2: 192.168.232.142
+      hostname: 192.168.232.146
+      hostname2: 192.168.232.147
   security: #security的配置
     username: admin
     password: admin123
