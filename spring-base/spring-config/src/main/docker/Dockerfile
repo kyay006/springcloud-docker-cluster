@@ -13,6 +13,6 @@ ADD spring-config-0.0.1-SNAPSHOT.jar app.jar
 #ENV PATH $PATH:$JAVA_HOME/bin
 #ENV CLASSPATH .:$JAVA_HOME/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 #开放8000端口
-EXPOSE 8888
+#EXPOSE 8888
 #配置容器启动后执行的命令
 ENTRYPOINT ["java","-jar","/app.jar"]
