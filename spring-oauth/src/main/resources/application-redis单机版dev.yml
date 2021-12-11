@@ -165,8 +165,8 @@ customConfig:
       username: admin
       password: admin123
 #      hostname: localhost
-      hostname: 192.168.232.146
-      hostname2: 192.168.232.147
+      hostname: 192.168.1.202
+      hostname2: 192.168.1.203
   config:
     server: #config的配置
       appname: spring-config
@@ -198,7 +198,7 @@ customConfig:
     server:
       url: jdbc:mysql://127.0.0.1:3306/lovesound?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
       username: root
-      password: adminsina
+      password: admin
       driver-class-name: com.mysql.jdbc.Driver
   rabbitmq: #rabbitmq的配置
     server:
