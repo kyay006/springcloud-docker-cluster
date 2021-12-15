@@ -3,8 +3,7 @@ package com.liu.util.string;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.liu.util.date.DateUtils;
-//import sun.misc.BASE64Decoder;
-import org.apache.commons.codec.binary.Base64;
+import sun.misc.BASE64Decoder;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -186,7 +185,7 @@ public class StringUtils{
 	 */
     public static String getBASE64(String str,boolean...bf) {
        if (StringUtils.isBlank(str)) return null;
-       String base64 = new org.apache.commons.codec.binary.Base64().encode(str.getBytes()) ;
+       String base64 = new sun.misc.BASE64Decoder().encode(str.getBytes()) ;
        //去掉 '='
        if(isBlank(bf) && bf[0]){
     	   base64 = base64.replaceAll("=", "");
