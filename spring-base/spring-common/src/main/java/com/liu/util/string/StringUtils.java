@@ -3,7 +3,8 @@ package com.liu.util.string;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.liu.util.date.DateUtils;
-import sun.misc.BASE64Decoder;
+//import sun.misc.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
