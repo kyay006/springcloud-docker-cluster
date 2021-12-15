@@ -186,7 +186,7 @@ public class StringUtils{
 	 */
     public static String getBASE64(String str,boolean...bf) {
        if (StringUtils.isBlank(str)) return null;
-       String base64 = new sun.misc.BASE64Encoder().encode(str.getBytes()) ;
+       String base64 = new org.apache.commons.codec.binary.Base64().encode(str.getBytes()) ;
        //去掉 '='
        if(isBlank(bf) && bf[0]){
     	   base64 = base64.replaceAll("=", "");
