@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.liu.util.date.DateUtils;
 //import sun.misc.BASE64Decoder;
-import java.util.Base64
+import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.Base64.Decoder;
 
@@ -189,7 +189,7 @@ public class StringUtils{
     public static String getBASE64(String str,boolean...bf) {
        if (StringUtils.isBlank(str)) return null;
        //String base64 = new java.util.Base64.Decoder().encode(str.getBytes()) ;
-	   String base64 = Base64.getEncoder().encodeToString(str.getBytes())
+	   String base64 = Base64.getEncoder().encodeToString(str.getBytes());
        //去掉 '='
        if(isBlank(bf) && bf[0]){
     	   base64 = base64.replaceAll("=", "");
@@ -201,7 +201,7 @@ public class StringUtils{
     public static String getStrByBASE64(String s) {
        if (isBlank(s)) return "";
        //BASE64Decoder decoder = new BASE64Decoder();
-          Decoder decoder=Base64.getMimeDecoder()
+          Decoder decoder=Base64.getMimeDecoder();
        try {
           byte[] b = decoder.decode(s);
           return new String(b);
